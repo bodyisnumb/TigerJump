@@ -16,6 +16,12 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private static int totalConsecutiveDropsWithoutCollision = 0;
     private const int MAX_CONSECUTIVE_DROPS = 3;
 
+    public GameObject trailPrefab; // Assign your trail prefab in the inspector
+    private GameObject trailInstance;
+
+    public ParticleSystem explosionParticlePrefab; // Assign your explosion particle prefab in the inspector
+    private ParticleSystem explosionParticleInstance;
+
     void Start()
     {
         canvas = GetComponentInParent<Canvas>();
@@ -44,6 +50,10 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         draggedObject.transform.SetParent(canvas.transform);
 
         Destroy(draggedObject.GetComponent<DraggablePaw>());
+
+        // Instantiate the trail prefab
+        trailInstance = Instantiate(trailPrefab, transform.position, Quaternion.identity);
+        trailInstance.transform.SetParent(canvas.transform);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -62,6 +72,9 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         draggedObject.transform.position = worldPosition;
         draggedObject.transform.localScale = initialScale;
+
+        // Update the trail position
+        trailInstance.transform.position = worldPosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -71,6 +84,11 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         if (draggedObject != null)
         {
             Destroy(draggedObject);
+        }
+
+        if (trailInstance != null)
+        {
+            Destroy(trailInstance);
         }
 
         CheckCollisionAtDropLocation(eventData.position);
@@ -107,6 +125,10 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 ResetConsecutiveDropCount();
                 collisionDetected = true;
                 Debug.Log("Filled Tree Color: " + treeColor);
+
+                // Create explosion particle effect
+                CreateExplosionParticle(worldPosition);
+
                 break;
             }
         }
@@ -145,5 +167,16 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 return DraggablePower.TreeColor.PinkTree;
         }
     }
+
+    private void CreateExplosionParticle(Vector3 position)
+    {
+        // Instantiate the explosion particle at the specified position
+        explosionParticleInstance = Instantiate(explosionParticlePrefab, position, Quaternion.identity);
+        // Play the particle effect
+        explosionParticleInstance.Play();
+        // Destroy the particle system after it has finished playing
+        Destroy(explosionParticleInstance.gameObject, explosionParticleInstance.main.duration);
+    }
 }
+
 
