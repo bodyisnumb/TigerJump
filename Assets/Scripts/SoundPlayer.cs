@@ -16,7 +16,21 @@ public class SoundPlayer : MonoBehaviour
     public AudioClip shield_guard;
     public AudioClip success;
 
+    public static SoundPlayer SoundControllerInstance;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+
+        if (SoundControllerInstance == null)
+        {
+            SoundControllerInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
 
     public void ButtonSound()

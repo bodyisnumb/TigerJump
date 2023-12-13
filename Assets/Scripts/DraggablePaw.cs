@@ -16,10 +16,10 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private static int totalConsecutiveDropsWithoutCollision = 0;
     private const int MAX_CONSECUTIVE_DROPS = 3;
 
-    public GameObject trailPrefab; // Assign your trail prefab in the inspector
+    public GameObject trailPrefab;
     private GameObject trailInstance;
 
-    public ParticleSystem explosionParticlePrefab; // Assign your explosion particle prefab in the inspector
+    public ParticleSystem explosionParticlePrefab;
     private ParticleSystem explosionParticleInstance;
 
     void Start()
@@ -73,7 +73,6 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         draggedObject.transform.position = worldPosition;
         draggedObject.transform.localScale = initialScale;
 
-        // Update the trail position
         trailInstance.transform.position = worldPosition;
     }
 
@@ -126,7 +125,6 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 collisionDetected = true;
                 Debug.Log("Filled Tree Color: " + treeColor);
 
-                // Create explosion particle effect
                 CreateExplosionParticle(worldPosition);
 
                 break;
@@ -170,11 +168,8 @@ public class DraggablePaw : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     private void CreateExplosionParticle(Vector3 position)
     {
-        // Instantiate the explosion particle at the specified position
         explosionParticleInstance = Instantiate(explosionParticlePrefab, position, Quaternion.identity);
-        // Play the particle effect
         explosionParticleInstance.Play();
-        // Destroy the particle system after it has finished playing
         Destroy(explosionParticleInstance.gameObject, explosionParticleInstance.main.duration);
     }
 }

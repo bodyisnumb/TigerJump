@@ -18,8 +18,11 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator LoadGameSceneAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync("Game");
         loadingScreen.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Game");
 
         while (!operation.isDone)
         {
@@ -31,8 +34,11 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator LoadMenuSceneAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync("MainMenu");
         loadingScreen.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync("MainMenu");
 
         while (!operation.isDone)
         {
