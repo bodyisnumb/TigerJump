@@ -12,22 +12,19 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
-        // Ensure the background image GameObject is initially inactive
         backgroundImage.SetActive(false);
 
-        // Disable all tutorial texts initially
         foreach (Text text in tutorialTexts)
         {
             text.gameObject.SetActive(false);
         }
 
-        // Add an onClick listener to the tutorialButton
         tutorialButton.onClick.AddListener(StartTutorial);
     }
 
     void StartTutorial()
     {
-        tutorialButton.gameObject.SetActive(false); // Hide the tutorial button
+        tutorialButton.gameObject.SetActive(false);
         tutorialStarted = true;
         ShowNextTutorial();
     }
@@ -60,9 +57,8 @@ public class TutorialManager : MonoBehaviour
             backgroundImage.SetActive(false);
             tutorialTexts[2].gameObject.SetActive(false);
             mainButtonsPanel.SetActive(true);
-            // Implement the action when the tutorial ends (e.g., load main menu)
             Debug.Log("Tutorial Ended. Perform necessary actions...");
-            // Add your code here to load the main menu scene or perform any other action
+            tutorialButton.gameObject.SetActive(true);
         }
     }
 }
